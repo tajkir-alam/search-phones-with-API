@@ -7,10 +7,14 @@ const loadPhones = async (search) => {
 
 const displayPhones = phones => {
     const cardContainer = document.getElementById('card-container');
+    cardContainer.textContent = "";
     phones.forEach(phone => {
         console.log(phone)
         const cardDiv = document.createElement('div');
         cardDiv.classList.add('col');
+
+
+        
         cardDiv.innerHTML = `
         <div class="card h-100 border-0 shadow">
             <div class="text-center py-3">
@@ -30,6 +34,15 @@ const displayPhones = phones => {
     });
 }
 
+const btnSearch = search => {
+    const searchField = document.getElementById('search-field').value;
+    loadPhones(searchField)
+}
 
+document.getElementById('search-field').addEventListener('keypress', function(e){
+    if(e.key == 'Enter'){
+        btnSearch();
+    }
+})
 
 loadPhones('iphone')
