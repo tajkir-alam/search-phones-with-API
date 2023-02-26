@@ -8,13 +8,19 @@ const loadPhones = async (search) => {
 const displayPhones = phones => {
     const cardContainer = document.getElementById('card-container');
     cardContainer.textContent = "";
+
+    const noPhone = document.getElementById('no-phone');
+    if(phones.length === 0){
+        noPhone.classList.remove('d-none')
+    }
+    else{
+        noPhone.classList.add('d-none')
+    }
+    
     phones.forEach(phone => {
         console.log(phone)
         const cardDiv = document.createElement('div');
         cardDiv.classList.add('col');
-
-
-        
         cardDiv.innerHTML = `
         <div class="card h-100 border-0 shadow">
             <div class="text-center py-3">
