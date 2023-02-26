@@ -1,12 +1,11 @@
-const loadPhones = async (search) => {
+const loadPhones = async (search, dataLimit) => {
     const URL = `https://openapi.programming-hero.com/api/phones?search=${search}`;
     const res = await fetch(URL);
     const data = await res.json();
-    displayPhones(data.data);
-    document.getElementById('spinner').classList.add('d-none');
+    displayPhones(data.data, dataLimit);
 }
 
-const displayPhones = phones => {
+const displayPhones = (phones, dataLimit) => {
     const cardContainer = document.getElementById('card-container');
     cardContainer.textContent = "";
 
@@ -20,14 +19,14 @@ const displayPhones = phones => {
     }
     
     // Show All Button
-    // const showAllBtn = document.getElementById('show-all');
-    // if(phones.length >= 3){
-    //     phones = phones.slice(0, 3);
-    //     showAllBtn.classList.remove('d-none');
-    // }
-    // else{
-    //     showAllBtn.classList.add('d-none');
-    // }
+    const showAllBtn = document.getElementById('show-all');
+    if(dataLimit && phones.length >= 3){
+        phones = phones.slice(0, 3);
+        showAllBtn.classList.remove('d-none');
+    }
+    else{
+        showAllBtn.classList.add('d-none');
+    }
 
     phones.forEach(phone => {
         console.log(phone)
@@ -50,14 +49,18 @@ const displayPhones = phones => {
         `   
         cardContainer.appendChild(cardDiv);
     });
+    document.getElementById('spinner').classList.add('d-none');
+}
+
+// Loading animation (Spinner) start
+const loadingAnimation = (dataLimit) => {
+    document.getElementById('spinner').classList.remove('d-none');
+    const searchField = document.getElementById('search-field').value;
+    loadPhones(searchField, dataLimit)
 }
 
 const btnSearch = search => {
-    // Loading animation (Spinner) start
-    document.getElementById('spinner').classList.remove('d-none');
-
-    const searchField = document.getElementById('search-field').value;
-    loadPhones(searchField)
+    loadingAnimation(3);
 }
 
 document.getElementById('search-field').addEventListener('keypress', function(e){
@@ -70,8 +73,8 @@ document.getElementById('title').addEventListener('click', function(){
     loadPhones('iphone');
 })
 
-// document.getElementById('show-all').addEventListener('click', function(){
-//     loadPhones('samsung');
-// })
+document.getElementById('show-all').addEventListener('click', function(){
+    loadingAnimation();
+})
 
 loadPhones('iphone')
