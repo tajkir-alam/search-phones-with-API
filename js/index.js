@@ -3,12 +3,14 @@ const loadPhones = async (search) => {
     const res = await fetch(URL);
     const data = await res.json();
     displayPhones(data.data);
+    document.getElementById('spinner').classList.add('d-none');
 }
 
 const displayPhones = phones => {
     const cardContainer = document.getElementById('card-container');
     cardContainer.textContent = "";
 
+    // No Phone Found Message
     const noPhone = document.getElementById('no-phone');
     if(phones.length === 0){
         noPhone.classList.remove('d-none')
@@ -17,6 +19,16 @@ const displayPhones = phones => {
         noPhone.classList.add('d-none')
     }
     
+    // Show All Button
+    // const showAllBtn = document.getElementById('show-all');
+    // if(phones.length >= 3){
+    //     phones = phones.slice(0, 3);
+    //     showAllBtn.classList.remove('d-none');
+    // }
+    // else{
+    //     showAllBtn.classList.add('d-none');
+    // }
+
     phones.forEach(phone => {
         console.log(phone)
         const cardDiv = document.createElement('div');
@@ -41,6 +53,9 @@ const displayPhones = phones => {
 }
 
 const btnSearch = search => {
+    // Loading animation (Spinner) start
+    document.getElementById('spinner').classList.remove('d-none');
+
     const searchField = document.getElementById('search-field').value;
     loadPhones(searchField)
 }
@@ -50,5 +65,13 @@ document.getElementById('search-field').addEventListener('keypress', function(e)
         btnSearch();
     }
 })
+
+document.getElementById('title').addEventListener('click', function(){
+    loadPhones('iphone');
+})
+
+// document.getElementById('show-all').addEventListener('click', function(){
+//     loadPhones('samsung');
+// })
 
 loadPhones('iphone')
