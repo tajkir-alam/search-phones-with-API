@@ -40,10 +40,10 @@ const displayPhones = (phones, dataLimit) => {
             <div class="card-body">
                 <h5 class="card-title">${phone.phone_name}</h5>
                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                <button class="btn btn-primary">Details</button>
+                <button onclick="loadDetails('${phone.slug}')" class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#btnDetails">Details</button>
             </div>
             <div class="card-footer">
-                <small class="text-muted">Last updated 3 mins ago</small>
+                <small class="text-muted">Update 3 Days Ago...</small>
             </div>
         </div>
         `   
@@ -76,5 +76,23 @@ document.getElementById('title').addEventListener('click', function(){
 document.getElementById('show-all').addEventListener('click', function(){
     loadingAnimation();
 })
+
+// Show Details
+const loadDetails = async id => {
+    const URL = `https://openapi.programming-hero.com/api/phone/${id}`;
+    const res = await fetch(URL);
+    const data = await res.json();
+    displayDetails(data.data)
+}
+
+const displayDetails = (details) => {
+    document.getElementById('product-modal-title').innerText = details.name;
+    document.getElementById('modal-img').src = details.image;
+    document.getElementById('modal-details').innerHTML = `
+    <h4>${details.name}</h4>
+    <p>Storage: ${details.mainFeatures.storage}</p>
+    <p>Chipset: ${details.mainFeatures.chipSet}</p>
+    `
+}
 
 loadPhones('iphone')
